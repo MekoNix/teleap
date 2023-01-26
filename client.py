@@ -15,7 +15,7 @@ SERVER="0.0.0.0"
 ADDR = (SERVER, PORT)
 
 client = socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect()
+client.connect(ADDR)
 
 send("Test")
 send(DISCONNECT_MESSAGE)
