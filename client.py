@@ -17,5 +17,8 @@ ADDR = (SERVER, PORT)
 client = socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)
 
-send("Test")
-send(DISCONNECT_MESSAGE)
+while True:
+    mesage = input()
+    send(mesage)
+    if mesage == DISCONNECT_MESSAGE:
+        exit("DISCONNECT BY USER")
