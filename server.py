@@ -1,18 +1,19 @@
-import threading
 import socket
+import threading
 
 HEADER = 64
 PORT = 5050
-SERVER = '192.168.0.11'
+SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
-DISCONECT_MESSAGE = '!DISCONECT'
+DISCONNECT_MESSAGE = "!DISCONNECT"
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
+
 def handle_client(conn, addr):
-    print(f'[NEW CONNECTION] {addr} connected.')
+    print(f"[NEW CONNECTION] {addr} connected.")
 
     connected = True
     while connected:
@@ -20,20 +21,24 @@ def handle_client(conn, addr):
         if msg_length:
             msg_length = int(msg_length)
             msg = conn.recv(msg_length).decode(FORMAT)
-            if msg == DISCONECT_MESSAGE:
+            if msg == DISCONNECT_MESSAGE:
                 connected = False
 
-        print(f'[{addr}] {msg}')
+            print(f"[{addr}] {msg}")
+            conn.send("Msg received".encode(FORMAT))
+
     conn.close()
+
 
 def start():
     server.listen()
+    print(f"[LISTENING] Server is listening on {SERVER}")
     while True:
-        addr, conn = server.accept()
-        print(addr, conn)
-        thread = threading.Thread(target=handle_client, args=(addr, conn))
+        conn, addr = server.accept()
+        thread = threading.Thread(target=handle_client, args=(conn, addr))
         thread.start()
-        print(f'[ACTIVE CONNECTING] {threading.active_count() - 1}')
+        print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
 
-print('[STARTING] server is starting...')
+
+print("[STARTING] server is starting...")
 start()
