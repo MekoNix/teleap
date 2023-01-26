@@ -11,11 +11,14 @@ HEADER = 64
 PORT = 5050
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE="!DISCONNECT"
-SERVER="192.168.0.11"
+SERVER="0.0.0.0"
 ADDR = (SERVER, PORT)
 
 client = socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)
 
-send("Test")
-send(DISCONNECT_MESSAGE)
+while True:
+    mesage = input()
+    send(mesage)
+    if mesage == DISCONNECT_MESSAGE:
+        exit("DISCONNECT BY USER")
